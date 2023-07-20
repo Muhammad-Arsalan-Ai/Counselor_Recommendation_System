@@ -1,0 +1,35 @@
+version: '3'
+services:
+
+  redis:
+    image: redis:latest
+    command: ["redis-server", "--bind", "redis", "--port", "6379"]
+    networks:
+      - capstone-project
+
+  etl:
+    build:
+      context: ./src/etl_service
+    container_name: etl-container
+    networks:
+      - capstone-project
+    depends_on:
+      - redis
+
+  matching:
+    build:
+      context: ./src/matching_service
+    container_name: matching-service
+    environment:
+      - BASE_URL=https://xloop-dummy.herokuapp.com
+    networks:
+      - capstone-project
+    ports:
+      - 8000:8000
+    depends_on:
+      - etl
+    command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000" ]
+
+networks:
+  capstone-project:
+    name: capstone-project

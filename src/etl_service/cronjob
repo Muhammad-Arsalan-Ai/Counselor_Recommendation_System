@@ -1,0 +1,2 @@
+BASE_URL="https://xloop-dummy.herokuapp.com"
+*/3 * * * * /usr/local/bin/python /home/etl_service/load.py >> /var/log/cron.log 2>&1

@@ -1,0 +1,6 @@
+[flake8]
+ignore=E203,W503  # E203 (spaces around :) and W503 (line break before binary operator) are output as a result of Black formatting
+dictionaries=en_US,python,technical
+docstring-convention=google
+max-line-length=120
+spellcheck-targets=comments

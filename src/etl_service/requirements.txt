@@ -1,0 +1,5 @@
+py4j==0.10.9.7
+pyspark==3.4.0
+python-dotenv==1.0.0
+redis==4.5.5
+requests==2.31.0
