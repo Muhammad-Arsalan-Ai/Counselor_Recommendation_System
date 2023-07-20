@@ -1,8 +1,8 @@
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql import functions as F
-
-from src.etl_service.base_logger import logger
-from src.etl_service.extract import get_api_data, urls
+import json
+from base_logger import logger
+from extract import get_api_data, urls
 
 
 def fetch_all_data(spark: SparkSession) -> dict:
@@ -30,12 +30,14 @@ def fetch_all_data(spark: SparkSession) -> dict:
     dataframes = {}
     for key, url in urls.items():
         data = get_api_data(url)
-        dataframes[key] = spark.createDataFrame(data)
+        # data = json.dumps(data)
+        dataframes[key] = spark.read.json(
+            spark.sparkContext.parallelize([json.dumps(data)])
+        )
 
     logger.info("Data received from endpoints")
-
+    # print(dataframes)
     return dataframes
-
 
 def joined_data(spark: SparkSession) -> DataFrame:
     """
@@ -67,14 +69,15 @@ def joined_data(spark: SparkSession) -> DataFrame:
     councillor_df = dataframes["councillor"]
     patient_councillor_df = dataframes["patient_councillor"]
     rating_df = dataframes["rating"]
+    
     joined_df = (
         appointment_df.join(
             patient_councillor_df,
-            appointment_df["patient_id"] == patient_councillor_df["patient_id"],
+            appointment_df["patientId"] == patient_councillor_df["patientId"],
         )
-        .join(rating_df, appointment_df["id"] == rating_df["appointment_id"])
+        .join(rating_df, appointment_df["id"] == rating_df["appointmentId"])
         .join(
-            councillor_df, councillor_df["id"] == patient_councillor_df["councillor_id"]
+            councillor_df, councillor_df["id"] == patient_councillor_df["councillorId"]
         )
         .select(
             councillor_df["id"].alias("councillor_id"),
@@ -118,13 +121,15 @@ def data_transformations() -> dict:
     spark = SparkSession.builder.getOrCreate()
 
     joined_df = joined_data(spark)
-
     specializations = joined_df.select("specialization").distinct().collect()
+    print(specializations)
 
     specialization_tables = {}
 
     for specialization_row in specializations:
+        
         specialization = specialization_row["specialization"]
+        # print(specialization)
 
         filtered_df = joined_df.filter(joined_df["specialization"] == specialization)
 
@@ -144,6 +149,7 @@ def data_transformations() -> dict:
     spark.stop()
     logger.info("Data has been transformed")
     return specialization_tables
+
 
 
 if __name__ == "__main__":
