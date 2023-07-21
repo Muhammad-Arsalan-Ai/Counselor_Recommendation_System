@@ -23,7 +23,7 @@ docs/_build/
 .ipynb_checkpoints
 
 # Environments
-.env
+
 .venv
 env/
 venv/

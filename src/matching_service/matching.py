@@ -1,5 +1,5 @@
-import json
-import os
+import json # type: ignore
+import os # type: ignore
 
 import requests  # type: ignore
 from dotenv import load_dotenv
@@ -22,7 +22,7 @@ def get_report_category(report_id: int) -> str:
     """
     # http://report.us-west-2.elasticbeanstalk.com/report/list
     
-    url = f"{os.getenv('BASE_URL')}/report/{report_id}"
+    url = f"{os.getenv('REPORT')}/report/{report_id}"
     print(url)
     response = requests.get(url)
     try:
