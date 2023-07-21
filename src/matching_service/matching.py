@@ -22,7 +22,7 @@ def get_report_category(report_id: int) -> str:
     """
     # http://report.us-west-2.elasticbeanstalk.com/report/list
     
-    url = f"{os.getenv('REPORT')}/report/{report_id}"
+    url = f"http://report.us-west-2.elasticbeanstalk.com/report/{report_id}"
     print(url)
     response = requests.get(url)
     try:
