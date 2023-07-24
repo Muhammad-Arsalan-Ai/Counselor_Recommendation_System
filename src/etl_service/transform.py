@@ -73,11 +73,11 @@ def joined_data(spark: SparkSession) -> DataFrame:
     joined_df = (
         appointment_df.join(
             patient_councillor_df,
-            appointment_df["patientId"] == patient_councillor_df["patientId"],
+            appointment_df["patient_id"] == patient_councillor_df["patient_id"],
         )
-        .join(rating_df, appointment_df["id"] == rating_df["appointmentId"])
+        .join(rating_df, appointment_df["id"] == rating_df["appointment_id"])
         .join(
-            councillor_df, councillor_df["id"] == patient_councillor_df["councillorId"]
+            councillor_df, councillor_df["id"] == patient_councillor_df["councillor_id"]
         )
         .select(
             councillor_df["id"].alias("councillor_id"),

@@ -22,8 +22,9 @@ def get_report_category(report_id: int) -> str:
     """
     # http://report.us-west-2.elasticbeanstalk.com/report/list
     
-    url = f"http://report.us-west-2.elasticbeanstalk.com/report/{report_id}"
-    print(url)
+    # url = f"http://report.us-west-2.elasticbeanstalk.com/report/{report_id}"
+    url = f"{os.getenv('BASE_URL')}/report/{report_id}"
+    # print(url)
     response = requests.get(url)
     try:
         response.raise_for_status()
@@ -33,7 +34,8 @@ def get_report_category(report_id: int) -> str:
         raise
     response_data = response.json()
     logger.info("Report Category received.")
-    return response_data["data"]["category"]
+    # return response_data["data"]["category"]
+    return response_data["category"]
 
 
 def matching_councillors(report_id: int, number_of_councillors: int = 15) -> list[dict]:

@@ -34,8 +34,5 @@ def load_data_to_redis(
     logger.info("Data Stored in Redis.")
     return specializations_dfs
 
-
-load_data_to_redis(get_redis_client(), data_transformations())
-
 if __name__ == "__main__":
     load_data_to_redis(get_redis_client(), data_transformations())

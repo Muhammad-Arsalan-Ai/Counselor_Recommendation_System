@@ -20,12 +20,11 @@ def get_api_data(url: str) -> dict:
 
 
 urls = {
-    "appointment": "http://appointment.us-west-2.elasticbeanstalk.com/appointments",
-    "councillor": "http://councelorapp-env.eba-mdmsh3sq.us-east-1.elasticbeanstalk.com/counselor",
-    "patient_councillor": "http://appointment.us-west-2.elasticbeanstalk.com/patient_councillor",
-    "rating": "http://ratingapp-env.eba-f5gxzjhm.us-east-1.elasticbeanstalk.com/rating",
+    "appointment": f"{os.getenv('BASE_URL')}/appointment",
+    "councillor": f"{os.getenv('BASE_URL')}/councillor",
+    "patient_councillor": f"{os.getenv('BASE_URL')}/patient_councillor",
+    "rating": f"{os.getenv('BASE_URL')}/rating",
 }
-
 
 if __name__ == "__main__":
     data = {key: get_api_data(val) for key, val in urls.items()}
